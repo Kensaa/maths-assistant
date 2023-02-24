@@ -1,5 +1,71 @@
 VERSION = '1.0.0'
 
+class Point:
+    def __init__(self, x=0, y=0, z=0)->None:
+        self.x = x
+        self.y = y
+        self.z = z
+    
+    def __add__(self, other):
+        return Point(self.x+other.x, self.y+other.y, self.z+other.z)
+
+    def __sub__(self, other):
+        return Point(self.x-other.x, self.y-other.y, self.z-other.z)
+    
+    def __eq__(self, other) -> bool:
+        return self.x == other.x and self.y == other.y and self.z == other.z    
+
+    def __str__(self):
+        return f'({self.x}; {self.y}; {self.z})'
+
+class Vector:
+    def __init__(self, p1: Point, p2: Point) -> None:
+        self.x = p2.x - p1.x
+        self.y = p2.y - p1.y
+        self.z = p2.z - p1.z
+        
+    def __init__(self, x=0, y=0, z=0) -> None:
+        self.x = x
+        self.y = y
+        self.z = z
+    
+    def __add__(self, other):
+        return Vector(self.x+other.x, self.y+other.y, self.z+other.z)
+    def __sub__(self, other):
+        return Vector(self.x-other.x, self.y-other.y, self.z-other.z)
+    def __eq__(self, other) -> bool:
+        return self.x == other.x and self.y == other.y and self.z == other.z
+
+    def add(self, other):
+        self.x += other.x
+        self.y += other.y
+        self.z += other.z
+        return self
+    def sub(self, other):
+        self.x -= other.x
+        self.y -= other.y
+        self.z -= other.z
+        return self
+    def mult(self, k:int):
+        self.x *= k
+        self.y *= k
+        self.z *= k
+        return self
+    
+    def norm(self):
+        return (self.x**2 + self.y**2 + self.z**2)**0.5
+
+    def dot(self, other):
+        return self.x*other.x + self.y*other.y + self.z*other.z
+    def cross(self, other):
+        return Vector(
+            self.y*other.z - self.z*other.y,
+            self.z*other.x - self.x*other.z,
+            self.x*other.y - self.y*other.x
+        )
+    def __str__(self):
+        return f'({self.x}; {self.y}; {self.z})'
+
 def action(name:str):
     def decorator_action(func):
         def wrapper():
@@ -10,16 +76,14 @@ def action(name:str):
             input('Appuyez sur entrée pour continuer...')
         return wrapper
     return decorator_action
-
 @action('Work In Progress')
 def WIP():
     print('NOT IMPLEMENTED')
 
-#POINT
 @action('Voir tous les points')
 def showPoints():
-    for name,coords in memory['points'].items():
-        print(f'{name} = {coords}')
+    for name,point in memory['points'].items():
+        print(f'{name}{point}')
 
 @action('Ajouter point(s)')
 def addPoints():
@@ -33,7 +97,7 @@ def addPoints():
         x = int(input('x > '))
         y = int(input('y > '))
         z = int(input('z > '))
-        memory['points'][name] = (x,y,z)
+        memory['points'][name] = Point(x,y,z)
 
 @action('Supprimer point')
 def deletePoint():
