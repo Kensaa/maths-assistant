@@ -19,12 +19,8 @@ class Point:
         return f'({self.x}; {self.y}; {self.z})'
 
 class Vector:
-    def __init__(self, p1: Point, p2: Point) -> None:
-        self.x = p2.x - p1.x
-        self.y = p2.y - p1.y
-        self.z = p2.z - p1.z
         
-    def __init__(self, x=0, y=0, z=0) -> None:
+    def __init__(self, x, y, z) -> None:
         self.x = x
         self.y = y
         self.z = z
@@ -53,7 +49,7 @@ class Vector:
         return self
     
     def norm(self):
-        return (self.x**2 + self.y**2 + self.z**2)**0.5
+        return f'sqrt({self.x**2 + self.y**2 + self.z**2})'
 
     def dot(self, other):
         return self.x*other.x + self.y*other.y + self.z*other.z
@@ -110,6 +106,71 @@ def deletePoint():
             continue
         del memory['points'][name]
 
+
+@action('Voir tous les vecteurs')
+def showVectors():
+    for name,vector in memory['vectors'].items():
+        print(f'{name}{vector}')
+
+@action('Voir normes des vecteurs')
+def showVectorsNorms():
+    for name,vector in memory['vectors'].items():
+        print(f'||{name}|| = {vector.norm()}')
+
+@action('Ajouter vecteur(s) a partir de 2 points existants')
+def addVectorsFromExistingPoint():
+    while True:
+        point1 = input('Nom du premier point > ').strip().upper()
+        if point1 == '':
+            break
+        point2 = input('Nom du deuxième point > ').strip().upper()
+        if point2 == '':
+            break
+        if point1 not in memory['points']:
+            print('Le premier point n\'existe pas')
+            continue
+        if point2 not in memory['points']:
+            print('Le deuxième point n\'existe pas')
+            continue
+        name = point1+point2
+        if name in memory['vectors']:
+            print('Ce nom est déjà utilisé')
+            continue
+        p1 = memory['points'][point1]
+        p2 = memory['points'][point2]
+        memory['vectors'][name] = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
+
+@action('Ajouter vecteur(s) a partir de 2 nouveaux points')
+def addVectorsFromNewPoint():
+    while True:
+        name = input('Nom du vecteur > ').strip().upper()
+        if name == '':
+            break
+        if name in memory['vectors']:
+            print('Ce nom est déjà utilisé')
+            continue
+        x1 = int(input('x du premier point > '))
+        y1 = int(input('y du premier point > '))
+        z1 = int(input('z du premier point > '))
+        x2 = int(input('x du deuxième point > '))
+        y2 = int(input('y du deuxième point > '))
+        z2 = int(input('z du deuxième point > '))
+        memory['vectors'][name] = Vector(x2-x1, y2-y1, z2-z1)
+
+@action('Ajouter vecteur(s) a partir de coordonnées')
+def addVectorsFromCoordinates():
+    while True:
+        name = input('Nom du vecteur > ').strip().upper()
+        if name == '':
+            break
+        if name in memory['vectors']:
+            print('Ce nom est déjà utilisé')
+            continue
+        x = int(input('x > '))
+        y = int(input('y > '))
+        z = int(input('z > '))
+        memory['vectors'][name] = Vector(x,y,z)
+
 memory = {
     'points': {},
     'vectors': {},
@@ -118,18 +179,18 @@ memory = {
 mainMenu = {
     'GEOMETRIE' : {
         'Points': {
-            'Voir tous les points': showPoints,
             'Ajouter point(s)': addPoints,
+            'Voir tous les points': showPoints,
             'Supprimer point': deletePoint,
         },
         'Vecteurs': {
-            'Voir tous les vecteurs': WIP,
-            'Voir normes des vecteurs': WIP,
             'Ajouter vecteur(s)': {
-                '2 points existants': WIP,
-                '2 nouveaux points': WIP,
-                'coordonnées': WIP,
-            }
+                '2 points existants': addVectorsFromExistingPoint,
+                '2 nouveaux points': addVectorsFromNewPoint,
+                'coordonnées': addVectorsFromCoordinates,
+            },
+            'Voir tous les vecteurs': showVectors,
+            'Voir normes des vecteurs': showVectorsNorms
         },
         'Produit Scalaire': {
             '4 points': WIP,
@@ -176,16 +237,19 @@ def main():
         print(title)
         drawCatergory(currentMenu)
         choice = int(input('Action > '))-1
-        choiceKey = getKeyByIndex(currentMenu,choice)
-        choiceValue = getValueByIndex(currentMenu,choice)
         if choice == -1:
             if len(currentPath) == 0:
                 break
             currentPath.pop()
-        elif isinstance(choiceValue, dict):
-                currentPath.append(choiceKey)
+        elif choice > len(currentMenu)-1:
+            print('Action invalide')
         else:
-            choiceValue()
+            choiceKey = getKeyByIndex(currentMenu,choice)
+            choiceValue = getValueByIndex(currentMenu,choice)
+            if isinstance(choiceValue, dict):
+                currentPath.append(choiceKey)
+            else:
+                choiceValue()
         
         print('\n'*15)
 
