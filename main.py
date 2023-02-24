@@ -231,7 +231,6 @@ def main():
         currentMenu = mainMenu
         for path in currentPath:
             currentMenu = currentMenu[path]
-        #tkt c de l'art
         location = 'Menu principal' if len(currentPath) == 0 else currentPath[-1]
         title = f'Maths Assistant v{VERSION} > {location}'
         print(title)
