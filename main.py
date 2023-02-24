@@ -1,9 +1,19 @@
 VERSION = '1.0.0'
 
+def action(name:str):
+    def decorator_action(func):
+        def wrapper():
+            print('\n'*15)
+            print(name)
+            print('')
+            func()
+        return wrapper
+    return decorator_action
+
+@action('la function 1')
 def function1():
-    print('function1')
-
-
+    print('do some stuff')
+    input()
 
 mainMenu = {
     'GEOMETRIE' : {
