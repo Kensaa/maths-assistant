@@ -270,6 +270,30 @@ def angleBetweenVectors2Vectors():
     print(f'cos({v1},{v2}) = {dot}/{normStr1}{normStr2} = {cosAngle}')
     print(f'Angle entre {v1} et {v2} = {acos(cosAngle)} rad = {angle/pi*180}°')
 
+@action('Representation parametrique d\'une droite avec 2 points')
+def parametricRepresentation2Points():
+    p1 = askPoint()
+    p2 = askPoint()
+    v = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
+    print(f'x = {p1.x} + t*{v.x}')
+    print(f'y = {p1.y} + t*{v.y}')
+    print(f'z = {p1.z} + t*{v.z}')
+
+@action('Representation parametrique d\'une droite avec 1 point et 1 vecteur')
+def parametricRepresentationPointVector():
+    p = askPoint()
+    v = askVector()
+    print(f'x = {p.x} + t*{v.x}')
+    print(f'y = {p.y} + t*{v.y}')
+    print(f'z = {p.z} + t*{v.z}')
+
+@action('Equation cartesienne de plan avec 1 point et 1 vecteur')
+def cartesianEquationPointVector():
+    p = askPoint()
+    v = askVector()
+    d = -(p.x*v.x + p.y*v.y + p.z*v.z)
+    print(f'{v.x}x + {v.y}y + {v.z}z + {d} = 0')
+
 mainMenu = {
     'GEOMETRIE' : {
         'Points': {
@@ -298,12 +322,12 @@ mainMenu = {
             '4 points': angleBetweenVectors4Points,
             '2 vecteurs': angleBetweenVectors2Vectors,
         },
-        'Equation parametrique': {
-            '2 points': WIP,
-            '1 point et 1 vecteur': WIP,
+        'Représentation parametrique': {
+            '2 points': parametricRepresentation2Points,
+            '1 point et 1 vecteur': parametricRepresentationPointVector,
         },
-        'Equation de plan': {
-            '1 point et 1 vecteur': WIP,
+        'Equation cartesienne de plan': {
+            '1 point et 1 vecteur': cartesianEquationPointVector,
         }
     }
 }
