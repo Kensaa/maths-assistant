@@ -171,10 +171,67 @@ def addVectorsFromCoordinates():
         z = int(input('z > '))
         memory['vectors'][name] = Vector(x,y,z)
 
-memory = {
-    'points': {},
-    'vectors': {},
-}
+def askPoint():
+    while True:
+        pAsk = input('Nom du point ou x > ')
+        if pAsk.isnumeric():
+            x = int(pAsk)
+            y = int(input('y > '))
+            z = int(input('z > '))
+            return Point(x,y,z)
+        else:
+            pAsk = pAsk.strip().upper()
+            if pAsk not in memory['points']:
+                print('Le point n\'existe pas')
+            else:
+                return memory['points'][pAsk]
+
+def askVector():
+    while True:
+        vAsk = input('Nom du vecteur ou x > ')
+        if vAsk.isnumeric():
+            x = int(vAsk)
+            y = int(input('y > '))
+            z = int(input('z > '))
+            return Vector(x,y,z)
+        else:
+            vAsk = vAsk.strip().upper()
+            if vAsk not in memory['vectors']:
+                print('Le vecteur n\'existe pas')
+            else:
+                return memory['vectors'][vAsk]
+
+@action('Produit scalaire avec 4 points')
+def dotProduct4Points():
+    p1 = askPoint()
+    p2 = askPoint()
+    p3 = askPoint()
+    p4 = askPoint()
+    v1 = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
+    v2 = Vector(p4.x-p3.x, p4.y-p3.y, p4.z-p3.z)
+    print(f'{v1}.{v2} = {v1.dot(v2)}')
+
+@action('Produit scalaire avec 2 vecteurs')
+def dotProduct2Vectors():
+    v1 = askVector()
+    v2 = askVector()
+    print(f'{v1}.{v2} = {v1.dot(v2)}')
+
+@action('Produit vectoriel avec 4 points')
+def crossProduct4Points():
+    p1 = askPoint()
+    p2 = askPoint()
+    p3 = askPoint()
+    p4 = askPoint()
+    v1 = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
+    v2 = Vector(p4.x-p3.x, p4.y-p3.y, p4.z-p3.z)
+    print(f'{v1}*{v2} = {v1.cross(v2)}')
+
+@action('Produit vectoriel avec 2 vecteurs')
+def crossProduct2Vectors():
+    v1 = askVector()
+    v2 = askVector()
+    print(f'{v1}*{v2} = {v1.cross(v2)}')
 
 mainMenu = {
     'GEOMETRIE' : {
@@ -193,12 +250,12 @@ mainMenu = {
             'Voir normes des vecteurs': showVectorsNorms
         },
         'Produit Scalaire': {
-            '4 points': WIP,
-            '2 vecteurs': WIP,
+            '4 points': dotProduct4Points,
+            '2 vecteurs': dotProduct2Vectors,
         },
         'Produit Vectoriel': {
-            '4 points': WIP,
-            '2 vecteurs': WIP,
+            '4 points': crossProduct4Points,
+            '2 vecteurs': crossProduct2Vectors,
         },
         'Angle entre vecteurs': {
             '4 points': WIP,
@@ -235,7 +292,11 @@ def main():
         title = f'Maths Assistant v{VERSION} > {location}'
         print(title)
         drawCatergory(currentMenu)
-        choice = int(input('Action > '))-1
+        inp = input('Action > ')
+        if not inp.isnumeric():
+            print('Action invalide')
+            continue
+        choice = int(inp)-1
         if choice == -1:
             if len(currentPath) == 0:
                 break
@@ -252,6 +313,10 @@ def main():
         
         print('\n'*15)
 
+memory = {
+    'points': {},
+    'vectors': {},
+}
 
 if __name__ == '__main__':
     main()
