@@ -176,16 +176,23 @@ def addVectorsFromCoordinates():
         z = int(input('z > '))
         memory['vectors'][name] = Vector(x,y,z)
 
+def isNumber(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 def askPoint():
     while True:
-        pAsk = input('Nom du point ou x > ')
-        if pAsk.isnumeric():
+        pAsk = input('Nom du point ou x > ').strip()
+        if isNumber(pAsk):
             x = int(pAsk)
             y = int(input('y > '))
             z = int(input('z > '))
             return Point(x,y,z)
         else:
-            pAsk = pAsk.strip().upper()
+            pAsk = pAsk.upper()
             if pAsk not in memory['points']:
                 print('Le point n\'existe pas')
             else:
@@ -193,14 +200,14 @@ def askPoint():
 
 def askVector():
     while True:
-        vAsk = input('Nom du vecteur ou x > ')
-        if vAsk.isnumeric():
+        vAsk = input('Nom du vecteur ou x > ').strip()
+        if isNumber(vAsk):
             x = int(vAsk)
             y = int(input('y > '))
             z = int(input('z > '))
             return Vector(x,y,z)
         else:
-            vAsk = vAsk.strip().upper()
+            vAsk = vAsk.upper()
             if vAsk not in memory['vectors']:
                 print('Le vecteur n\'existe pas')
             else:
