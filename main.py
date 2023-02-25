@@ -1,3 +1,5 @@
+from math import acos, pi
+
 VERSION = '1.0.0'
 
 class Point:
@@ -48,8 +50,11 @@ class Vector:
         self.z *= k
         return self
     
-    def norm(self):
+    def normStr(self):
         return f'sqrt({self.x**2 + self.y**2 + self.z**2})'
+
+    def norm(self):
+        return (self.x**2 + self.y**2 + self.z**2)**0.5
 
     def dot(self, other):
         return self.x*other.x + self.y*other.y + self.z*other.z
@@ -115,7 +120,7 @@ def showVectors():
 @action('Voir normes des vecteurs')
 def showVectorsNorms():
     for name,vector in memory['vectors'].items():
-        print(f'||{name}|| = {vector.norm()}')
+        print(f'||{name}|| = {vector.normStr()}')
 
 @action('Ajouter vecteur(s) a partir de 2 points existants')
 def addVectorsFromExistingPoint():
@@ -233,6 +238,38 @@ def crossProduct2Vectors():
     v2 = askVector()
     print(f'{v1}*{v2} = {v1.cross(v2)}')
 
+@action('Angle entre vecteurs avec 4 points')
+def angleBetweenVectors4Points():
+    p1 = askPoint()
+    p2 = askPoint()
+    p3 = askPoint()
+    p4 = askPoint()
+    v1 = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
+    v2 = Vector(p4.x-p3.x, p4.y-p3.y, p4.z-p3.z)
+    dot = v1.dot(v2)
+    normStr1 = v1.normStr()
+    normStr2 = v2.normStr()
+    norm1 = v1.norm()
+    norm2 = v2.norm()
+    cosAngle = dot/(norm1*norm2)
+    angle = acos(cosAngle)
+    print(f'cos({v1},{v2}) = {dot}/{normStr1}{normStr2} = {cosAngle}')
+    print(f'Angle entre {v1} et {v2} = {acos(cosAngle)} rad = {angle/pi*180}°')
+
+@action('Angle entre vecteurs avec 2 vecteurs')
+def angleBetweenVectors2Vectors():
+    v1 = askVector()
+    v2 = askVector()
+    dot = v1.dot(v2)
+    normStr1 = v1.normStr()
+    normStr2 = v2.normStr()
+    norm1 = v1.norm()
+    norm2 = v2.norm()
+    cosAngle = dot/(norm1*norm2)
+    angle = acos(cosAngle)
+    print(f'cos({v1},{v2}) = {dot}/{normStr1}{normStr2} = {cosAngle}')
+    print(f'Angle entre {v1} et {v2} = {acos(cosAngle)} rad = {angle/pi*180}°')
+
 mainMenu = {
     'GEOMETRIE' : {
         'Points': {
@@ -258,8 +295,8 @@ mainMenu = {
             '2 vecteurs': crossProduct2Vectors,
         },
         'Angle entre vecteurs': {
-            '4 points': WIP,
-            '2 vecteurs': WIP,
+            '4 points': angleBetweenVectors4Points,
+            '2 vecteurs': angleBetweenVectors2Vectors,
         },
         'Equation parametrique': {
             '2 points': WIP,
