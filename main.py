@@ -18,7 +18,8 @@ class Point:
         return self.x == other.x and self.y == other.y and self.z == other.z    
 
     def __str__(self):
-        return f'({self.x}; {self.y}; {self.z})'
+        #return f'({self.x}; {self.y}; {self.z})'
+        return '({}; {}; {})'.format(self.x, self.y, self.z)
 
 class Vector:
         
@@ -51,7 +52,8 @@ class Vector:
         return self
     
     def normStr(self):
-        return f'sqrt({self.x**2 + self.y**2 + self.z**2})'
+        #return f'sqrt({self.x**2 + self.y**2 + self.z**2})'
+        return 'sqrt({})'.format(self.x**2 + self.y**2 + self.z**2)
 
     def norm(self):
         return (self.x**2 + self.y**2 + self.z**2)**0.5
@@ -65,13 +67,15 @@ class Vector:
             self.x*other.y - self.y*other.x
         )
     def __str__(self):
-        return f'({self.x}; {self.y}; {self.z})'
+        #return f'({self.x}; {self.y}; {self.z})'
+        return '({}; {}; {})'.format(self.x, self.y, self.z)
 
 def action(name:str):
     def decorator_action(func):
         def wrapper():
             print('\n'*15)
-            print(f'*** {name} ***')
+            #print(f'*** {name} ***')
+            print('*** {} ***'.format(name))
             print('')
             func()
             input('Appuyez sur entrée pour continuer...')
@@ -84,7 +88,8 @@ def WIP():
 @action('Voir tous les points')
 def showPoints():
     for name,point in memory['points'].items():
-        print(f'{name}{point}')
+        #print(f'{name}{point}')
+        print('{}{}'.format(name,point))
 
 @action('Ajouter point(s)')
 def addPoints():
@@ -115,12 +120,14 @@ def deletePoint():
 @action('Voir tous les vecteurs')
 def showVectors():
     for name,vector in memory['vectors'].items():
-        print(f'{name}{vector}')
+        #print(f'{name}{vector}')
+        print('{}{}'.format(name,vector))
 
 @action('Voir normes des vecteurs')
 def showVectorsNorms():
     for name,vector in memory['vectors'].items():
-        print(f'||{name}|| = {vector.normStr()}')
+        #print(f'||{name}|| = {vector.normStr()}')
+        print('||{}|| = {}'.format(name,vector.normStr()))
 
 @action('Ajouter vecteur(s) a partir de 2 points existants')
 def addVectorsFromExistingPoint():
@@ -221,13 +228,15 @@ def dotProduct4Points():
     p4 = askPoint()
     v1 = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
     v2 = Vector(p4.x-p3.x, p4.y-p3.y, p4.z-p3.z)
-    print(f'{v1}.{v2} = {v1.dot(v2)}')
+    #print(f'{v1}.{v2} = {v1.dot(v2)}')
+    print('{}{} = {}'.format(v1,v2,v1.dot(v2)))
 
 @action('Produit scalaire avec 2 vecteurs')
 def dotProduct2Vectors():
     v1 = askVector()
     v2 = askVector()
-    print(f'{v1}.{v2} = {v1.dot(v2)}')
+    #print(f'{v1}.{v2} = {v1.dot(v2)}')
+    print('{}{} = {}'.format(v1,v2,v1.dot(v2)))
 
 @action('Produit vectoriel avec 4 points')
 def crossProduct4Points():
@@ -237,13 +246,15 @@ def crossProduct4Points():
     p4 = askPoint()
     v1 = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
     v2 = Vector(p4.x-p3.x, p4.y-p3.y, p4.z-p3.z)
-    print(f'{v1}*{v2} = {v1.cross(v2)}')
+    #print(f'{v1}*{v2} = {v1.cross(v2)}')
+    print('{}{} = {}'.format(v1,v2,v1.cross(v2)))
 
 @action('Produit vectoriel avec 2 vecteurs')
 def crossProduct2Vectors():
     v1 = askVector()
     v2 = askVector()
-    print(f'{v1}*{v2} = {v1.cross(v2)}')
+    #print(f'{v1}*{v2} = {v1.cross(v2)}')
+    print('{}{} = {}'.format(v1,v2,v1.cross(v2)))
 
 @action('Angle entre vecteurs avec 4 points')
 def angleBetweenVectors4Points():
@@ -260,8 +271,10 @@ def angleBetweenVectors4Points():
     norm2 = v2.norm()
     cosAngle = dot/(norm1*norm2)
     angle = acos(cosAngle)
-    print(f'cos({v1},{v2}) = {dot}/{normStr1}{normStr2} = {cosAngle}')
-    print(f'Angle entre {v1} et {v2} = {acos(cosAngle)} rad = {angle/pi*180}°')
+    #print(f'cos({v1},{v2}) = {dot}/{normStr1}{normStr2} = {cosAngle}')
+    #print(f'Angle entre {v1} et {v2} = {acos(cosAngle)} rad = {angle/pi*180}°')
+    print('cos({},{}) = {}/{}{} = {}'.format(v1,v2,dot,normStr1,normStr2,cosAngle))
+    print('Angle entre {} et {} = {} rad = {}°'.format(v1,v2,acos(cosAngle),angle/pi*180))
 
 @action('Angle entre vecteurs avec 2 vecteurs')
 def angleBetweenVectors2Vectors():
@@ -274,32 +287,41 @@ def angleBetweenVectors2Vectors():
     norm2 = v2.norm()
     cosAngle = dot/(norm1*norm2)
     angle = acos(cosAngle)
-    print(f'cos({v1},{v2}) = {dot}/{normStr1}{normStr2} = {cosAngle}')
-    print(f'Angle entre {v1} et {v2} = {acos(cosAngle)} rad = {angle/pi*180}°')
+    #print(f'cos({v1},{v2}) = {dot}/{normStr1}{normStr2} = {cosAngle}')
+    #print(f'Angle entre {v1} et {v2} = {acos(cosAngle)} rad = {angle/pi*180}°')
+    print('cos({},{}) = {}/{}{} = {}'.format(v1,v2,dot,normStr1,normStr2,cosAngle))
+    print('Angle entre {} et {} = {} rad = {}°'.format(v1,v2,acos(cosAngle),angle/pi*180))
 
 @action('Representation parametrique d\'une droite avec 2 points')
 def parametricRepresentation2Points():
     p1 = askPoint()
     p2 = askPoint()
     v = Vector(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z)
-    print(f'x = {p1.x} + t*{v.x}')
-    print(f'y = {p1.y} + t*{v.y}')
-    print(f'z = {p1.z} + t*{v.z}')
+    #print(f'x = {p1.x} + t*{v.x}')
+    #print(f'y = {p1.y} + t*{v.y}')
+    #print(f'z = {p1.z} + t*{v.z}')
+    print('x = {} + t*{}'.format(p1.x,v.x))
+    print('y = {} + t*{}'.format(p1.y,v.y))
+    print('z = {} + t*{}'.format(p1.z,v.z))
 
 @action('Representation parametrique d\'une droite avec 1 point et 1 vecteur')
 def parametricRepresentationPointVector():
     p = askPoint()
     v = askVector()
-    print(f'x = {p.x} + t*{v.x}')
-    print(f'y = {p.y} + t*{v.y}')
-    print(f'z = {p.z} + t*{v.z}')
+    #print(f'x = {p.x} + t*{v.x}')
+    #print(f'y = {p.y} + t*{v.y}')
+    #print(f'z = {p.z} + t*{v.z}')
+    print('x = {} + t*{}'.format(p.x,v.x))
+    print('y = {} + t*{}'.format(p.y,v.y))
+    print('z = {} + t*{}'.format(p.z,v.z))
 
 @action('Equation cartesienne de plan avec 1 point et 1 vecteur')
 def cartesianEquationPointVector():
     p = askPoint()
     v = askVector()
     d = -(p.x*v.x + p.y*v.y + p.z*v.z)
-    print(f'{v.x}x + {v.y}y + {v.z}z + {d} = 0')
+    #print(f'{v.x}x + {v.y}y + {v.z}z + {d} = 0')
+    print('{}x + {}y + {}z + {} = 0'.format(v.x,v.y,v.z,d))
 
 mainMenu = {
     'GEOMETRIE' : {
@@ -341,7 +363,8 @@ mainMenu = {
 
 def drawCatergory(category:dict):
     for i,name in enumerate(category.keys()):
-        print(f'\t{i+1}. {name}')
+        #print(f'\t{i+1}. {name}')
+        print('\t{}. {}'.format(i+1,name))
     print('\n\t0. Go back')
 
 def getKeyByIndex(category:dict,index:int):
@@ -357,11 +380,12 @@ def main():
         for path in currentPath:
             currentMenu = currentMenu[path]
         location = 'Menu principal' if len(currentPath) == 0 else currentPath[-1]
-        title = f'Maths Assistant v{VERSION} > {location}'
+        #title = f'Maths Assistant v{VERSION} > {location}'
+        title = 'Maths Assistant v{} > {}'.format(VERSION,location)
         print(title)
         drawCatergory(currentMenu)
         inp = input('Action > ')
-        if not inp.isnumeric():
+        if not isNumber(inp):
             print('Action invalide')
             continue
         choice = int(inp)-1
@@ -379,12 +403,11 @@ def main():
             else:
                 choiceValue()
         
-        print('\n'*15)
+        print('\n'*5)
 
 memory = {
     'points': {},
     'vectors': {},
 }
 
-if __name__ == '__main__':
-    main()
+main()
