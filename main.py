@@ -70,6 +70,84 @@ class Vector:
         #return f'({self.x}; {self.y}; {self.z})'
         return '({}; {}; {})'.format(self.x, self.y, self.z)
 
+class Number:
+    def __init__(self,num:int,den=1):
+        assert den != 0, "denominator is 0"
+        self.num = num
+        self.den = den
+    
+    def simplify(self):
+        #simplify fraction
+        return self
+    
+    def __eq__(self, other) -> bool:
+        if isinstance(other,int):
+            other = Number(other)
+        return self.num*other.den == self.den*other.num
+
+    def __lt__(self, other) -> bool:
+        if isinstance(other,int):
+            other = Number(other)
+        return self.num*other.den - other.num*self.den < 0
+
+    def __gt__(self, other) -> bool:
+        if isinstance(other,int):
+            other = Number(other)
+        return self.num*other.den - other.num*self.den < 0
+
+    def __le__(self, other) -> bool:
+        if isinstance(other,int):
+            other = Number(other)
+        return self.num*other.den - other.num*self.den <= 0
+    
+    def __ge__(self, other) -> bool:
+        if isinstance(other,int):
+            other = Number(other)
+        return self.num*other.den - other.num*self.den >= 0
+    
+    def __ne__(self, other) -> bool:
+        if isinstance(other,int):
+            other = Number(other)
+        return self.num*other.den != self.den*other.num
+    
+    def __add__(self, other):
+        if isinstance(other,int):
+            other = Number(other)
+        return Number(self.num*other.den+other.num*self.den,self.den*other.den).simplify()
+    
+    def __sub__(self, other):
+        if isinstance(other,int):
+            other = Number(other)
+        return Number(self.num*other.den-other.num*self.den,self.den*other.den).simplify()
+    
+    def __mul__(self, other):
+        if isinstance(other,int):
+            other = Number(other)
+        return Number(self.num*other.num, self.den*other.den).simplify()
+    
+    def __truediv__(self, other):
+        if isinstance(other,int):
+            other = Number(other)
+        return Number(self.num*other.den,self.den*other.num).simplify()
+    
+    def __floordiv__(self, other):
+        return self.__truediv__(other)
+    
+    def __pow__(self, other):
+        if isinstance(other,int):
+            other = Number(other)
+        assert other.den != 1, 'denominator isn\'t 1'
+        return Number(self.num**other.num,self.den**other.num).simplify()
+    
+    def __str__(self):
+        if self.den == 1:
+            return str(self.num)
+        else:
+            return '{}/{}'.format(self.num,self.den)
+        
+    def __repr__(self) -> str:
+        return self.__str__()
+
 def action(name:str):
     def decorator_action(func):
         def wrapper():
@@ -183,9 +261,9 @@ def addVectorsFromCoordinates():
         z = int(input('z > '))
         memory['vectors'][name] = Vector(x,y,z)
 
-def isNumber(s):
+def isNumber(n):
     try:
-        float(s)
+        float(n)
         return True
     except ValueError:
         return False
@@ -373,41 +451,42 @@ def getKeyByIndex(category:dict,index:int):
 def getValueByIndex(category:dict,index:int):
     return list(category.values())[index]
 
-def main():
-    currentPath = []
-    while True:
-        currentMenu = mainMenu
-        for path in currentPath:
-            currentMenu = currentMenu[path]
-        location = 'Menu principal' if len(currentPath) == 0 else currentPath[-1]
-        #title = f'Maths Assistant v{VERSION} > {location}'
-        title = 'Maths Assistant v{} > {}'.format(VERSION,location)
-        print(title)
-        drawCatergory(currentMenu)
-        inp = input('Action > ')
-        if not isNumber(inp):
-            print('Action invalide')
-            continue
-        choice = int(inp)-1
-        if choice == -1:
-            if len(currentPath) == 0:
-                break
-            currentPath.pop()
-        elif choice > len(currentMenu)-1:
-            print('Action invalide')
-        else:
-            choiceKey = getKeyByIndex(currentMenu,choice)
-            choiceValue = getValueByIndex(currentMenu,choice)
-            if isinstance(choiceValue, dict):
-                currentPath.append(choiceKey)
-            else:
-                choiceValue()
-        
-        print('\n'*5)
+
+
 
 memory = {
     'points': {},
     'vectors': {},
 }
 
-main()
+#main program
+currentPath = []
+while True:
+    currentMenu = mainMenu
+    for path in currentPath:
+        currentMenu = currentMenu[path]
+    location = 'Menu principal' if len(currentPath) == 0 else currentPath[-1]
+    #title = f'Maths Assistant v{VERSION} > {location}'
+    title = 'Maths Assistant v{} > {}'.format(VERSION,location)
+    print(title)
+    drawCatergory(currentMenu)
+    inp = input('Action > ')
+    if not isNumber(inp):
+        print('Action invalide')
+        continue
+    choice = int(inp)-1
+    if choice == -1:
+        if len(currentPath) == 0:
+            break
+        currentPath.pop()
+    elif choice > len(currentMenu)-1:
+        print('Action invalide')
+    else:
+        choiceKey = getKeyByIndex(currentMenu,choice)
+        choiceValue = getValueByIndex(currentMenu,choice)
+        if isinstance(choiceValue, dict):
+            currentPath.append(choiceKey)
+        else:
+            choiceValue()
+    print('\n'*5)
+    
